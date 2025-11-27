@@ -5,7 +5,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 //Add DbContext to the container
 builder.Services.AddDbContext<ExamMeAiContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("ExamMeAi") ?? throw new InvalidOperationException("Connection string 'PersonalIdentityServiceContext' not found.")));
+    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.")));
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
