@@ -1,4 +1,11 @@
+using ExamMeAI.Data;
+using Microsoft.EntityFrameworkCore;
+
 var builder = WebApplication.CreateBuilder(args);
+
+//Add DbContext to the container
+builder.Services.AddDbContext<ExamMeAiContext>(options =>
+    options.UseSqlServer(builder.Configuration.GetConnectionString("ExamMeAi") ?? throw new InvalidOperationException("Connection string 'PersonalIdentityServiceContext' not found.")));
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
