@@ -1,13 +1,12 @@
 ﻿namespace ExamMeAI.Models
 {
-    public class Domain
+    public class Title
     {
+
         public int Id { get; set; }
 
-        public string DomainName { get; set; }
+        public string TitleText { get; set; }
 
         public ICollection<Question> Questions { get; set; }
-
-        public ICollection<Title> Titles { get; set; }
     }
 }

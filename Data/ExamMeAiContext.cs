@@ -12,7 +12,7 @@ namespace ExamMeAI.Data
         }
 
         public DbSet<Question> Question { get; set; }
-        public DbSet<Genre> Genre { get; set; }
+        public DbSet<Title> Title { get; set; }
         public DbSet<Domain> Domain { get; set; }
 
     }
