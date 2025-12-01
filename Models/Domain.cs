@@ -2,7 +2,7 @@
 {
     public class Domain
     {
-        public int Id { get; set; }
+        public int DomainId { get; set; }
 
         public string DomainName { get; set; }
 

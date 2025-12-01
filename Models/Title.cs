@@ -3,7 +3,7 @@
     public class Title
     {
 
-        public int Id { get; set; }
+        public int TitleId { get; set; }
 
         public string TitleText { get; set; }
 

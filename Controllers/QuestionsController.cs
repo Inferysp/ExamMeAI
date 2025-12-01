@@ -34,7 +34,7 @@ namespace ExamMeAI.Controllers
             }
 
             var question = await _context.Question
-                .FirstOrDefaultAsync(m => m.Id == id);
+                .FirstOrDefaultAsync(m => m.QuestionId == id);
             if (question == null)
             {
                 return NotFound();
@@ -88,7 +88,7 @@ namespace ExamMeAI.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("Id,text,User,Title")] Question question)
         {
-            if (id != question.Id)
+            if (id != question.QuestionId)
             {
                 return NotFound();
             }
@@ -102,7 +102,7 @@ namespace ExamMeAI.Controllers
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!QuestionExists(question.Id))
+                    if (!QuestionExists(question.QuestionId))
                     {
                         return NotFound();
                     }
@@ -125,7 +125,7 @@ namespace ExamMeAI.Controllers
             }
 
             var question = await _context.Question
-                .FirstOrDefaultAsync(m => m.Id == id);
+                .FirstOrDefaultAsync(m => m.QuestionId == id);
             if (question == null)
             {
                 return NotFound();
@@ -151,7 +151,7 @@ namespace ExamMeAI.Controllers
 
         private bool QuestionExists(int id)
         {
-            return _context.Question.Any(e => e.Id == id);
+            return _context.Question.Any(e => e.QuestionId == id);
         }
     }
 }
