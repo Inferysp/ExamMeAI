@@ -14,7 +14,7 @@ namespace ExamMeAI.Controllers
             _context = context;
         }
 
-        public IActionResult ExamMe()
+        public IActionResult ExamMeAI()
         {
             return View();
         }
