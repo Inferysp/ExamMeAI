@@ -19,6 +19,12 @@ namespace ExamMeAI.Controllers
             return View();
         }
 
+        public IActionResult Index()
+        {
+            var questions = _context.Question.ToList();
+            return View(questions);
+        }
+
         // Akcja zwracająca listę pytań     
         public IActionResult GetQuestions()
         {
