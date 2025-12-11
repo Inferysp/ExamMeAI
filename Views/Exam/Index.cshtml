@@ -1,15 +1,4 @@
-﻿@* @model IEnumerable<Question>
-
-@{ ViewData["Title"] = "Exam Me AI" }
-
-<h1>@ViewData["Title"]</h1>
-<form asp-controller="Exam" asp-action="Index" method="get">
-    <select asp-for="QuestionText" asp-items="Model.Question">
-        <option value="">Choose Question !!</option>
-    </select>
-</form> *@
-
-@model IEnumerable<Question>
+﻿@model IEnumerable<Question>
 
 @{
     ViewData["Title"] = "Exam - Index";
@@ -17,6 +6,8 @@
 
 <h2>Choose a Question</h2>
 
+<!-- DropDown -->
+<div>
 <form asp-action="Index" method="post">
     <select name="selectedQuestionId" class="form-control">
         @foreach (var q in Model)
@@ -27,3 +18,17 @@
 
     <button type="submit" class="btn btn-primary">Submit</button>
 </form>
+</div>
+@if (ViewBag.SelectedQuestionText != null)
+{
+    <div class="mt-3">
+        <label><strong>Selected Question:</strong> @ViewBag.SelectedQuestionText</label>
+    </div>
+}
+
+<label>Odpowiedź AI</label>
+<div>
+    <span>
+    <p>ocena:<strong><pre>5</pre></strong></p>
+    </span>
+</div>
