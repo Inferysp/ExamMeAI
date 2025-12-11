@@ -1,5 +1,6 @@
-﻿using Microsoft.EntityFrameworkCore;
-using ExamMeAI.Data;
+﻿using ExamMeAI.Data;
+using ExamMeAI.Demo.controllerDI;
+using Microsoft.EntityFrameworkCore;
 
 namespace ExamMeAI
 {
@@ -14,6 +15,9 @@ namespace ExamMeAI
 
         public void ConfigureServices(IServiceCollection services)
         {
+
+            services.AddSingleton<IDateTime, SystemDateTime>();
+
             services.AddDbContext<ExamMeAiContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
 
