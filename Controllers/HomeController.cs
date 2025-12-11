@@ -1,6 +1,8 @@
 using ExamMeAI.Demo.controllerDI;
 using ExamMeAI.Models;
+using ExamMeAI.Providers.NLog;
 using Microsoft.AspNetCore.Mvc;
+using NLog;
 using System;
 using System.Diagnostics;
 
@@ -29,6 +31,7 @@ namespace ExamMeAI.Controllers
             else if (serverTime.Hour < 17)
             {
                 ViewData["Message"] = "It's afternoon here - Good Afternoon!";
+                (NLogSingleton.GetInstance()).NlogInit().Info("It's afternoon here - Good Afternoon!");
             }
             else
             {
