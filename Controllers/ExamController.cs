@@ -26,23 +26,24 @@ namespace ExamMeAI.Controllers
             return View(questions);
         }
 
-        // Akcja POST (obsługuje wybór z DropDown)
+        // Nowa akcja POST dedykowana dla AJAX. Zwraca dane JSON.
         [HttpPost]
-        public IActionResult Index(int selectedQuestionId)
+        public IActionResult GetQuestionDetails(int questionId)
         {
-            // 1. Znajdź pełny tekst pytania w bazie danych na podstawie otrzymanego ID
-            var selectedQuestion = _context.Question.FirstOrDefault(q => q.QuestionId == selectedQuestionId);
+            var selectedQuestion = _context.Question.FirstOrDefault(q => q.QuestionId == questionId);
 
             if (selectedQuestion != null)
             {
-                // 2. Przekaż tekst pytania do ViewBag, aby był dostępny w widoku
-                ViewBag.SelectedQuestionText = selectedQuestion.QuestionText;
-                ViewBag.SelectedQuestionId = selectedQuestion.QuestionId; // Opcjonalnie: zachowaj ID
+                // Zwróć obiekt anonimowy w formacie JSON
+                return Json(new
+                {
+                    questionId = selectedQuestion.QuestionId,
+                    questionText = selectedQuestion.QuestionText
+                });
             }
 
-            // 3. Przeładuj listę pytań, aby ponownie wypełnić DropDown na wypadek kolejnego wyboru
-            var questions = _context.Question.ToList();
-            return View(questions);
+            // Zwróć błąd 404 lub pusty wynik, jeśli nie znaleziono pytania
+            return NotFound();
         }
 
         // Akcja zwracająca listę pytań     

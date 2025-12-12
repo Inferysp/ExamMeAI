@@ -6,29 +6,51 @@
 
 <h2>Choose a Question</h2>
 
-<!-- DropDown -->
 <div>
-<form asp-action="Index" method="post">
-    <select name="selectedQuestionId" class="form-control">
+    <!-- Zmieniamy formę na div i dodajemy ID do selecta oraz labela -->
+    <select id="questionDropdown" class="form-control" onchange="fetchQuestionText()">
+        <option value="">-- Wybierz pytanie --</option>
         @foreach (var q in Model)
         {
             <option value="@q.QuestionId">@q.QuestionText</option>
         }
     </select>
-
-    <button type="submit" class="btn btn-primary">Submit</button>
-</form>
 </div>
-@if (ViewBag.SelectedQuestionText != null)
-{
-    <div class="mt-3">
-        <label><strong>Selected Question:</strong> @ViewBag.SelectedQuestionText</label>
-    </div>
+
+<div class="mt-3 alert alert-info" style="display: none;" id="labelContainer">
+    <label><strong>Selected Question:</strong></label>
+    <!-- Ten element zaktualizujemy dynamicznie przez JavaScript -->
+    <span id="selectedQuestionTextLabel"></span> 
+</div>
+
+<!-- Sekcja JavaScript (wymaga jQuery) -->
+@section Scripts {
+    <script src="code.jquery.com"></script>
+    <script>
+        function fetchQuestionText() {
+            var selectedId = $('#questionDropdown').val();
+            var container = $('#labelContainer');
+            var label = $('#selectedQuestionTextLabel');
+
+            if (selectedId) {
+                // Wykonaj żądanie AJAX POST do nowej akcji kontrolera
+                $.ajax({
+                    url: '@Url.Action("GetQuestionDetails", "Exam")', // Adres URL do nowej akcji
+                    type: 'POST',
+                    data: { questionId: selectedId }, // Dane wysyłane do serwera
+                    success: function(response) {
+                        // Po sukcesie: zaktualizuj tylko ten jeden span
+                        label.text(response.questionText); 
+                        container.show(); // Pokaż kontener z labelem
+                    },
+                    error: function(error) {
+                        console.error("Wystąpił błąd podczas pobierania danych:", error);
+                        container.hide();
+                    }
+                });
+            } else {
+                container.hide();
+            }
+        }
+    </script>
 }
-
-<label>Odpowiedź AI</label>
-<div>
-    <span>
-    <p>ocena:<strong><pre>5</pre></strong></p>
-    </span>
-</div>
