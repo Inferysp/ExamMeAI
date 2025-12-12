@@ -7,3 +7,15 @@
     display: flex;
     flex-direction: row;
 }
+
+.container-user-answer {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+}
+
+.answer-input-form {
+    margin: 32px;
+    padding: 13px;
+    height: 400px;
+}
