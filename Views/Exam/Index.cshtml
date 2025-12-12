@@ -3,16 +3,17 @@
 @{
     ViewData["Title"] = "Exam - Index";
 }
+<h2>Hi 'user' Let's test your knowledge.</h2>
 
-<h2>Choose a Question</h2>
+<div class="container-dropdown-1">
+    <h2>Choose a Question:</h2>
 
-<div>
     <!-- Zmieniamy formę na div i dodajemy ID do selecta oraz labela -->
     <select id="questionDropdown" class="form-control" onchange="fetchQuestionText()">
         <option value="">-- Wybierz pytanie --</option>
         @foreach (var q in Model)
         {
-            <option value="@q.QuestionId">@q.QuestionText</option>
+            <option value="@q.QuestionId" style={width: 20px}>@q.QuestionId. @q.QuestionText</option>
         }
     </select>
 </div>
