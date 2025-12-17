@@ -48,6 +48,9 @@ namespace ExamMeAI.Controllers
         // GET: Questions/Create
         public IActionResult Create()
         {
+            //Przekazanie listy tytułów do widoku
+            ViewData["TitleID"] = new SelectList(_context.Title, "ID", "TitleText");
+            ViewData["DomainID"] = new SelectList(_context.Domain, "ID", "Name");
             return View();
         }
 
@@ -56,7 +59,7 @@ namespace ExamMeAI.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,text,User,Title")] Question question)
+        public async Task<IActionResult> Create([Bind("ID,QuestionText,User,TitleID,DomainID")] Question question)
         {
             if (ModelState.IsValid)
             {
@@ -64,6 +67,16 @@ namespace ExamMeAI.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
+
+            // Debug: zbierz błędy walidacji (zastąp Console lub TempData własnym loggerem)
+            var errors = ModelState
+                .Where(kvp => kvp.Value.Errors.Count > 0)
+                .Select(kvp => new { Key = kvp.Key, Errors = kvp.Value.Errors.Select(e => e.ErrorMessage).ToArray() })
+                .ToList();
+            TempData["ModelErrors"] = System.Text.Json.JsonSerializer.Serialize(errors);
+
+            ViewData["TitleID"] = new SelectList(_context.Title, "ID", "TitleText", question.TitleID);
+            ViewData["DomainID"] = new SelectList(_context.Domain, "ID", "Name", question.DomainID);
             return View(question);
         }
 
