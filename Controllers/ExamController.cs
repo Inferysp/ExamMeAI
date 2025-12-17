@@ -30,14 +30,14 @@ namespace ExamMeAI.Controllers
         [HttpPost]
         public IActionResult GetQuestionDetails(int questionId)
         {
-            var selectedQuestion = _context.Question.FirstOrDefault(q => q.QuestionId == questionId);
+            var selectedQuestion = _context.Question.FirstOrDefault(q => q.ID == questionId);
 
             if (selectedQuestion != null)
             {
                 // Zwróć obiekt anonimowy w formacie JSON
                 return Json(new
                 {
-                    questionId = selectedQuestion.QuestionId,
+                    questionId = selectedQuestion.ID,
                     questionText = selectedQuestion.QuestionText
                 });
             }

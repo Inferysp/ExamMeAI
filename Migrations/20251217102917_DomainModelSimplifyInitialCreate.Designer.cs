@@ -49,14 +49,14 @@ namespace ExamMeAI.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("QuestionId"));
 
-                    b.Property<int>("DomainId")
+                    b.Property<int>("DomainID")
                         .HasColumnType("int");
 
                     b.Property<string>("QuestionText")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("TitleId")
+                    b.Property<int>("TitleID")
                         .HasColumnType("int");
 
                     b.Property<string>("User")
@@ -64,26 +64,26 @@ namespace ExamMeAI.Migrations
 
                     b.HasKey("QuestionId");
 
-                    b.HasIndex("DomainId");
+                    b.HasIndex("DomainID");
 
-                    b.HasIndex("TitleId");
+                    b.HasIndex("TitleID");
 
                     b.ToTable("Question");
                 });
 
             modelBuilder.Entity("ExamMeAI.Models.Title", b =>
                 {
-                    b.Property<int>("TitleId")
+                    b.Property<int>("TitleID")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("TitleId"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("TitleID"));
 
                     b.Property<string>("TitleText")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("TitleId");
+                    b.HasKey("TitleID");
 
                     b.ToTable("Title");
                 });
@@ -92,13 +92,13 @@ namespace ExamMeAI.Migrations
                 {
                     b.HasOne("ExamMeAI.Models.Domain", "Domain")
                         .WithMany("Questions")
-                        .HasForeignKey("DomainId")
+                        .HasForeignKey("DomainID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("ExamMeAI.Models.Title", "Title")
                         .WithMany("Questions")
-                        .HasForeignKey("TitleId")
+                        .HasForeignKey("TitleID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 

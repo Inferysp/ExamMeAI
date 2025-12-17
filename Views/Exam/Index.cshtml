@@ -15,7 +15,7 @@
         <option value="">-- Wybierz pytanie --</option>
         @foreach (var q in Model)
         {
-            <option value="@q.QuestionId" style={width: 20px}>@q.QuestionId. @q.QuestionText</option>
+            <option value="@q.ID" style={width: 20px}>@q.ID. @q.QuestionText</option>
         }
     </select>
 </div>
@@ -89,7 +89,7 @@
                 $.ajax({
                     url: '@Url.Action("GetQuestionDetails", "Exam")', // Adres URL do nowej akcji
                     type: 'POST',
-                    data: { questionId: selectedId }, // Dane wysyłane do serwera
+                    data: { ID: selectedId }, // Dane wysyłane do serwera
                     success: function(response) {
                         // Po sukcesie: zaktualizuj tylko ten jeden span
                         label.text(response.questionText); 

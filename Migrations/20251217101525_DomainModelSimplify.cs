@@ -27,13 +27,13 @@ namespace ExamMeAI.Migrations
                 name: "Title",
                 columns: table => new
                 {
-                    TitleId = table.Column<int>(type: "int", nullable: false)
+                    TitleID = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     TitleText = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Title", x => x.TitleId);
+                    table.PrimaryKey("PK_Title", x => x.TitleID);
                 });
 
             migrationBuilder.CreateTable(
@@ -44,35 +44,35 @@ namespace ExamMeAI.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     QuestionText = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     User = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    TitleId = table.Column<int>(type: "int", nullable: false),
-                    DomainId = table.Column<int>(type: "int", nullable: false)
+                    TitleID = table.Column<int>(type: "int", nullable: false),
+                    DomainID = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Question", x => x.QuestionId);
                     table.ForeignKey(
                         name: "FK_Question_Domain_DomainId",
-                        column: x => x.DomainId,
+                        column: x => x.DomainID,
                         principalTable: "Domain",
                         principalColumn: "ID",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_Question_Title_TitleId",
-                        column: x => x.TitleId,
+                        column: x => x.TitleID,
                         principalTable: "Title",
-                        principalColumn: "TitleId",
+                        principalColumn: "TitleID",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(
                 name: "IX_Question_DomainId",
                 table: "Question",
-                column: "DomainId");
+                column: "DomainID");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Question_TitleId",
                 table: "Question",
-                column: "TitleId");
+                column: "TitleID");
         }
 
         /// <inheritdoc />
