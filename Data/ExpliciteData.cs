@@ -105,7 +105,7 @@ namespace ExamMeAI.Data
 
             var domain = new Domain[]
             {
-                new Domain{DomainName="JUNIOR"}
+                new Domain{Name="JUNIOR"}
             };
             foreach (Domain e in domain)
             {

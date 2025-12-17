@@ -2,12 +2,11 @@
 {
     public class Domain
     {
-        public int DomainId { get; set; }
+        public int ID { get; set; }
 
-        public string DomainName { get; set; }
+        public string Name { get; set; }
 
         public ICollection<Question> Questions { get; set; }
 
-        public ICollection<Title> Titles { get; set; }
     }
 }
