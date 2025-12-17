@@ -18,6 +18,45 @@ namespace ExamMeAI.Data
                 return;   // DB has been seeded
             }
 
+
+
+            var domain = new Domain[]
+            {
+                new Domain{Name=".NET"}
+            };
+            foreach (Domain e in domain)
+            {
+                context.Domain.Add(e);
+            }
+            context.SaveChanges();
+
+
+
+            var title = new Title[]
+{
+                new Title{TitleText="Ogólne"},
+                new Title{TitleText="Obsługa wyjątków"},
+
+                new Title{TitleText="Platforma .NET"},
+
+                new Title{TitleText="Typy danych, kolekcje i struktury danych"},
+
+                new Title{TitleText="Klasy, struktury i interfejsy"},
+
+                new Title{TitleText="Asynchroniczność"},
+
+                new Title{TitleText="Bazy danych"},
+
+                new Title{TitleText="Testy"}
+};
+            foreach (Title e in title)
+            {
+                context.Title.Add(e);
+            }
+            context.SaveChanges();
+
+
+
             var question = new Question[]
             {
                 new Question{QuestionText="Wymień podstawowe założenia programowania obiektowego.",User = "system",TitleID=1,DomainID=1},
@@ -80,38 +119,8 @@ namespace ExamMeAI.Data
             }
             context.SaveChanges();
 
-            var title = new Title[]
-            {
-                new Title{TitleText="Ogólne"},
-                new Title{TitleText="Obsługa wyjątków"},
 
-                new Title{TitleText="Platforma .NET"},
 
-                new Title{TitleText="Typy danych, kolekcje i struktury danych"},
-
-                new Title{TitleText="Klasy, struktury i interfejsy"},
-
-                new Title{TitleText="Asynchroniczność"},
-
-                new Title{TitleText="Bazy danych"},
-
-                new Title{TitleText="Testy"}
-            };
-            foreach (Title e in title)
-            {
-                context.Title.Add(e);
-            }
-            context.SaveChanges();
-
-            var domain = new Domain[]
-            {
-                new Domain{Name=".NET"}
-            };
-            foreach (Domain e in domain)
-            {
-                context.Domain.Add(e);
-            }
-            context.SaveChanges();
         }
     }
 }
