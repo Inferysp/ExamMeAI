@@ -34,6 +34,8 @@ namespace ExamMeAI.Controllers
             }
 
             var question = await _context.Question
+                .Include(q => q.Title)
+                .Include(a => a.Domain)
                 .FirstOrDefaultAsync(m => m.ID == id);
             if (question == null)
             {

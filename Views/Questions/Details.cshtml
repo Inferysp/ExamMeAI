@@ -10,9 +10,6 @@
     <h4>Question</h4>
     <hr />
     <dl class="row">
-        <dt class="col-sm-2">Id</dt>
-        <dd class="col-sm-10">@Model.ID</dd>
-
         <dt class="col-sm-2">Text</dt>
         <dd class="col-sm-10">@Model.QuestionText</dd>
 
@@ -20,10 +17,10 @@
         <dd class="col-sm-10">@Model.User</dd>
 
         <dt class="col-sm-2">Title</dt>
-        <dd class="col-sm-10">@Model.TitleID</dd>
+        <dd class="col-sm-10">@Model.TitleID. @Html.DisplayFor(model => model.Title.TitleText)</dd>
 
         <dt class="col-sm-2">Domain</dt>
-        <dd class="col-sm-10">@Model.DomainID</dd>
+        <dd class="col-sm-10">@Model.Domain.Name</dd>
     </dl>
 </div>
 <div>
