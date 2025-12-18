@@ -61,19 +61,50 @@ namespace ExamMeAI.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("ID,QuestionText,User,TitleID,DomainID")] Question question)
         {
-            if (ModelState.IsValid)
+
+            // SPRAWDŹ CZY TitleID ISTNIEJE W BAZIE
+            bool titleExists = await _context.Title.AnyAsync(t => t.ID == question.TitleID);
+            if (!titleExists)
             {
-                _context.Add(question);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                ModelState.AddModelError("TitleID", "Wybrany tytuł nie istnieje.");
             }
 
+            // SPRAWDŹ CZY DomainID ISTNIEJE
+            bool domainExists = await _context.Domain.AnyAsync(d => d.ID == question.DomainID);
+            if (!domainExists)
+            {
+                ModelState.AddModelError("DomainID", "Wybrana domena nie istnieje.");
+            }
+
+            try
+            {
+                if (ModelState.IsValid)
+                {
+                    _context.Add(question);
+                    await _context.SaveChangesAsync();
+                    TempData["SuccessMessage"] = "Pytanie zostało dodane.";
+                    return RedirectToAction(nameof(Index));
+                }
+                else
+                {
+                    var errors = ModelState.Values.SelectMany(v => v.Errors);
+                    foreach (var error in errors)
+                    {
+                        Console.WriteLine($"Error: {error.ErrorMessage}");
+                    }
+
+                }
+            }
+            catch (DbUpdateException ex)
+            {
+                ModelState.AddModelError("", $"Błąd zapisu: {ex.InnerException?.Message ?? ex.Message}");
+            }
             // Debug: zbierz błędy walidacji (zastąp Console lub TempData własnym loggerem)
-            var errors = ModelState
-                .Where(kvp => kvp.Value.Errors.Count > 0)
-                .Select(kvp => new { Key = kvp.Key, Errors = kvp.Value.Errors.Select(e => e.ErrorMessage).ToArray() })
-                .ToList();
-            TempData["ModelErrors"] = System.Text.Json.JsonSerializer.Serialize(errors);
+            //var errors = ModelState
+            //    .Where(kvp => kvp.Value.Errors.Count > 0)
+            //    .Select(kvp => new { Key = kvp.Key, Errors = kvp.Value.Errors.Select(e => e.ErrorMessage).ToArray() })
+            //    .ToList();
+            //TempData["ModelErrors"] = System.Text.Json.JsonSerializer.Serialize(errors);
 
             ViewData["TitleID"] = new SelectList(_context.Title, "ID", "TitleText", question.TitleID);
             ViewData["DomainID"] = new SelectList(_context.Domain, "ID", "Name", question.DomainID);

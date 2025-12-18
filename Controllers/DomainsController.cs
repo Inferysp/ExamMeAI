@@ -62,6 +62,15 @@ namespace ExamMeAI.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
+            else
+            {
+                var errors = ModelState.Values.SelectMany(v => v.Errors);
+                foreach (var error in errors)
+                {
+                    Console.WriteLine($"Error: {error.ErrorMessage}");
+                }
+
+            }
             return View(domain);
         }
 
