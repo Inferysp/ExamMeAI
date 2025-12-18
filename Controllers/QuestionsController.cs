@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using ExamMeAI.Data;
 using ExamMeAI.Models;
+using ExamMeAI.Models.CombiningModels;
 
 namespace ExamMeAI.Controllers
 {
@@ -22,7 +23,17 @@ namespace ExamMeAI.Controllers
         // GET: Questions
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Question.ToListAsync());
+            var qList = await _context.Question
+                .Select(c => new QuestionList
+                {
+                    ID = c.ID,
+                    QuestionText = c.QuestionText,
+                    TitleText = c.Title.TitleText,
+                    DomainName = c.Domain.Name,
+                })
+                .ToListAsync();
+
+            return View(qList);
         }
 
         // GET: Questions/Details/5
