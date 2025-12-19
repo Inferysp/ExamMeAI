@@ -1,0 +1,10 @@
+﻿@{
+    ViewData["Title"] = "Demo Page";
+}
+
+<div class="text-center container">
+    <h1 class="display-4">@ViewData["Title"]</h1>
+    <Form class="fs-1" asp-controller="Demo" asp-action="MakeTest">
+        <Button type="submit" class="btn btn-success">Make OpenAI responce to console Test!</Button>
+    </Form>
+</div>
