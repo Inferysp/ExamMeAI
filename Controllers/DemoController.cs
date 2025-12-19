@@ -35,15 +35,18 @@ namespace ExamMeAI.Controllers
 
                 ChatClient chatClient = client.GetChatClient("gpt-5-nano");
 
+                var answer = "Get - wysyła żądanie do klienta, a POST - wysył na server. Obydwa są metodami protokołu WSL.";
+                var question = "Jaka jest różnica pomiędzy metodami HTTP GET i POST?";
+
                 ChatCompletion completion = chatClient.CompleteChat(
                     [
-                        // System messages represent instructions or other guidance about how the assistant should behave
-                        new SystemChatMessage("You are a helpful assistant that talks like a pirate."),
-                        // User messages represent user input, whether historical or the most recent input
-                        new UserChatMessage("Hi, can you help me?"),
-                        // Assistant messages in a request represent conversation history for responses
-                        new AssistantChatMessage("Arrr! Of course, me hearty! What can I do for ye?"),
-                        new UserChatMessage("What's the best way to train a parrot?"),
+                        new SystemChatMessage("Jesteś wykwalifikowanym nauczycielem oceniającym odpowiedź." +
+                        "Odnieś się do odpowiedzi użytkownika na zasadzie 'odpowiedź' - 'komentarz'" +
+                        "w sekcji 'Analiza odpowiedzi:' oraz rozwiń odpowiedź i ocenę w sekcji 'Omówienie zagadnienia:'." +
+                        "W sekcji 'Ocena:' umieść szacunkową ocenę 1-6 oraz 'Wyczerpanie tematu:' przedstaw" +
+                        " procentową wartość ujętych w odpowiedzi kwestii ze wszystkich które uwzględnia pytanie w twojej ocenie."),
+
+                        new UserChatMessage($"Oceń odpowiedź:'{answer}' udzieloną na pytanie: '{question}'"),
                     ]);
 
                 Console.WriteLine($"{completion.Role}: {completion.Content[0].Text}");
