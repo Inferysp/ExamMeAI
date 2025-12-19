@@ -1,5 +1,5 @@
-﻿using OpenAI.Chat;
-using System.Configuration;
+﻿using OpenAI;
+using OpenAI.Chat;
 
 namespace ExamMeAI.Demo.OpenAI
 {
@@ -15,11 +15,11 @@ namespace ExamMeAI.Demo.OpenAI
             return _chatDemo;
         }
 
-        internal void WriteAnswerToConsole(string OpenAIKey)
+        internal void WriteAnswerToConsole(string OpenRouterKey)
         {
-            ChatClient client = new(model: "gpt-4o", apiKey: OpenAIKey);
+            ChatClient client = new(model: "gpt-4o", apiKey: OpenRouterKey);
 
-            ChatCompletion completion = client.CompleteChat("Jak używać delegató we wzorcu projektowym DI?");
+            ChatCompletion completion = client.CompleteChat("Jak używać delegatów we wzorcu projektowym DI?");
 
             Console.WriteLine($"OpenAI response: {completion.Content[0].Text}");
         }
