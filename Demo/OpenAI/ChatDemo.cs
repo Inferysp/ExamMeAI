@@ -6,7 +6,7 @@ namespace ExamMeAI.Demo.OpenAI
     public sealed class ChatDemo
     {
         private static ChatDemo _chatDemo = null!;
-        public static ChatDemo GetInstance()
+        public ChatDemo GetInstance()
         {
             if (_chatDemo == null)
             {
