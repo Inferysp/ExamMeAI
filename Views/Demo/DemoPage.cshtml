@@ -5,18 +5,27 @@
 <div class="text-center container">
     <h1 class="display-4">@ViewData["Title"]</h1>
     <Form id="DemoForm" asp-controller="Demo" method="post" class="fs-1">
-        <Button type="button" id="DemoBtn" class="btn btn-success">Make OpenAI responce to console Test!</Button>
+        <Button type="button" id="DemoOpenAiBtn" class="btn btn-success">Make OpenAI responce to console Test!</Button>
     </Form>
 
     <div class="mt-4">
         <h2>Response from OpenAI:</h2>
-        <pre id="OpenAIResponce" class="fs-5">--wartość startowa--</pre>
+        <pre id="OpenAIResponce" class="fs-5">--OpenAI response field--</pre>
+    </div>
+
+    <Form id="DemoForm" asp-controller="Demo" method="post" class="fs-1">
+        <Button type="button" id="DemoBtn" class="btn btn-success">Make String responce to console Test!</Button>
+    </Form>
+
+    <div class="mt-4">
+        <h2>Response from AJAX Post request:</h2>
+        <pre id="StringResponce" class="fs-5">--wartość startowa--</pre>
     </div>
 </div>
-
+PostStringOnBtnClick
 @section Scripts {
 <script>
-    document.getElementById("DemoBtn").addEventListener("click", function (event) {
+    document.getElementById("DemoOpenAiBtn").addEventListener("click", function (event) {
         event.preventDefault(); // blokuje przeładowanie strony
 
         console.log("Button clicked, fetching OpenAI response...");
@@ -31,6 +40,25 @@
         .then(data => {
             console.log("Response from server:", data);
             document.getElementById("OpenAIResponce").textContent = data;
+        })
+        .catch(error => console.error("Error:", error));
+    });
+
+    document.getElementById("DemoBtn").addEventListener("click", function (event) {
+        event.preventDefault(); // blokuje przeładowanie strony
+
+        console.log("Button clicked, fetching OpenAI response...");
+
+        fetch('/Demo/PostStringOnBtnClick', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        })
+        .then(response => response.text())
+        .then(data => {
+            console.log("Response from server:", data);
+            document.getElementById("StringResponce").textContent = data;
         })
         .catch(error => console.error("Error:", error));
     });
