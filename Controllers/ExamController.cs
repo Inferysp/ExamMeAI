@@ -29,9 +29,9 @@ namespace ExamMeAI.Controllers
 
         // Nowa akcja POST dedykowana dla AJAX. Zwraca dane JSON.
         [HttpPost]
-        public IActionResult GetQuestionDetails(int questionId)
+        public IActionResult GetQuestionDetails(int selectedID)
         {
-            var selectedQuestion = _context.Question.FirstOrDefault(q => q.ID == questionId);
+            var selectedQuestion = _context.Question.FirstOrDefault(q => q.ID == selectedID);
 
             if (selectedQuestion != null)
             {
@@ -42,12 +42,12 @@ namespace ExamMeAI.Controllers
                     questionText = selectedQuestion.QuestionText
                 });
             }
-
+            Console.WriteLine($"HttpPost -przetworzono pytanie: {selectedQuestion}");
             // Zwróć błąd 404 lub pusty wynik, jeśli nie znaleziono pytania
             return NotFound();
         }
 
-        // Akcja zwracająca listę pytań     
+        // Akcja zwracająca listę pytań ExamMe.cshtml
         public IActionResult GetQuestions()
         {
             var questions = _context.Question.ToList();

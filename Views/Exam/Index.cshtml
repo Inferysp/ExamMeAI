@@ -11,7 +11,7 @@
     <h2 class="p-2 text-nowrap">Choose a Question:</h2>
 
 
-    <select id="questionDropdown" class="form-control p-2" onchange="fetchQuestionText()">
+    <select id="questionDropdown" class="form-control p-2">
         <option value="">-- Wybierz pytanie --</option>
         @foreach (var q in Model)
         {
@@ -20,8 +20,8 @@
     </select>
 </div>
 
-<div class="mt-3 alert alert-info" style="display: none;" id="labelContainer">
-    <label><strong>Selected Question:</strong></label>
+<div id="labelContainer" class="mt-3 alert alert-info" style="display: none;">
+    <label ><strong>Selected Question:</strong></label>
     <span id="selectedQuestionTextLabel"></span> 
 </div>
 
@@ -75,39 +75,48 @@
     <textarea id="assessment' class="form-index"></textarea> 
 </div>
 
-<!-- Sekcja JavaScript (wymaga jQuery) -->
 @section Scripts {
-    <script src="code.jquery.com"></script>
     <script>
-        function fetchQuestionText() {
-            var selectedId = $('#questionDropdown').val();
-            var container = $('#labelContainer');
-            var label = $('#selectedQuestionTextLabel');
+        document.addEventListener('DOMContentLoaded', function() {
+            const dropdown = document.getElementById('questionDropdown');
+            const container = document.getElementById('labelContainer');
+            const label = document.getElementById('selectedQuestionTextLabel');
 
-            if (selectedId) {
-                // Wykonaj żądanie AJAX POST do nowej akcji kontrolera
-                $.ajax({
-                    url: '@Url.Action("GetQuestionDetails", "Exam")', // Adres URL do nowej akcji
-                    type: 'POST',
-                    data: { ID: selectedId }, // Dane wysyłane do serwera
-                    success: function(response) {
-                        // Po sukcesie: zaktualizuj tylko ten jeden span
-                        label.text(response.questionText); 
-                        container.show(); // Pokaż kontener z labelem
-                    },
-                    error: function(error) {
-                        console.error("Wystąpił błąd podczas pobierania danych:", error);
-                        container.hide();
+            dropdown.addEventListener('change', async function() {
+                const selectedid = this.value;
+
+                if(!selectedid){
+                    container.style.display = 'none';
+                    return;
+                }
+
+                try {
+                    const formData = new FormData();
+                    formData.append('selectedID', selectedid);
+
+                    const response = await fetch('@Url.Action("GetQuestionDetails", "Exam")',
+                    {
+                        method: 'POST',
+                        body: formData
+                    })
+
+                    if(response.ok) {
+                        const data = await response.json();
+                        label.textContent = data.questionText;
+                        container.style.display = 'block';
+
+                    } else {
+                        console.error('Błąd sieci:', response.statusText);
                     }
-                });
-            } else {
-                container.hide();
-            }
-        }
-    </script>
+                 } catch (error) {
+                     console.error('Błąd pobierania danych:', error);
+                }
+            })
+        });
+        </script>
     <script>
         document.GetElementById("AssessmentButton").AddeventListener("click", function() {
-            fetch(@Url.Action("GetAssessment", "Exam"))
+            fetch('@Url.Action("GetAssessment", "Exam")')
             .then(responce => {
                 document.GetElementById("assessment").value = responce;
             })
