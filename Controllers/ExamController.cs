@@ -48,27 +48,33 @@ namespace ExamMeAI.Controllers
         }
 
         // Akcja zwracająca listę pytań ExamMe.cshtml
-        public IActionResult GetQuestions()
+        public async Task<IActionResult> GetQuestions()
         {
             var questions = _context.Question.ToList();
             return PartialView("ExamMe", questions);
         }
         // Nowa akcja POST dedykowana dla AJAX. Zwraca dane string.
         [HttpPost]
-        public IActionResult GetAssessment()
+        public IActionResult GetAssessment(String answer, String question)
+        {
+            return Content("answer: " + answer + " question: " + question);
+        }
+
+        // Nowa akcja POST dedykowana dla AJAX. Zwraca dane string.
+        [HttpPost]
+        public IActionResult GetAssessment1(String answer, String question)
         {
             //string v = "";
             //if (_config.GetConnectionString("OpenAIKey") != null)
             //{
-            //    var question = "q";
-            //    var answer = "a";
+            //string question = question;
+            //var answer = answer;
 
             //    v = ChatOpenAI.GetInstance().RunAiTest(_config.GetConnectionString("OpenAIKey"), question, answer);
             //}
 
-            //return Content(v);
-            return Content("Testowy message!");
+            return Content("answer: " + answer + " question: " + question);
+            //return Content("Testowy message!");
         }
-
     }
 }

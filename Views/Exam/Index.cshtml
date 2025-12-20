@@ -27,7 +27,7 @@
 
 <div class="container-index" id="divContainer">
     <label><strong>Your answer:</strong></label>
-    <textarea class="form-index"></textarea> 
+    <textarea id="givenAnswer" class="form-index"></textarea> 
 </div>
 
 <nav class="navbar navbar-expand-lg bg-body-tertiary">
@@ -113,17 +113,22 @@
                 }
             })
         });
-        </script>
+    </script>
     <script>
-        document.getElementById("AssessmentButton").addEventListener("click", function(e) {
-            e.preventDefault();
-            console.log("coś pisze")
-            fetch('@Url.Action("GetAssessment", "Exam")', {method: 'POST'})
-            .then(resp => resp.text())
-            .then(data => {
-                console.log("Response from server:", data);
-                document.getElementById("assessment").value = data;
+        document.getElementById("AssessmentButton").addEventListener("click", async () => {
+            const answer = document.getElementById("givenAnswer").value;
+            const question = document.getElementById("selectedQuestionTextLabel").textContent;
+
+            const formData = new FormData();
+            formData.append('answer', answer);
+            formData.append('question', question);
+
+            const response = await fetch('@Url.Action("GetAssessment", "Exam")', {
+                method: 'POST',
+                body: formData
             })
+            const result = await response.text();
+            document.getElementById("assessment").value = result;
         });
     </script>
 }
