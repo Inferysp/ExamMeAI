@@ -4,8 +4,8 @@
 
 <div class="text-center container">
     <h1 class="display-4">@ViewData["Title"]</h1>
-    <Form id="DemoForm" asp-controller="Demo" method="post" class="fs-1">
-        <Button type="button" id="DemoOpenAiBtn" class="btn btn-success">Make OpenAI responce to console Test!</Button>
+    <Form asp-controller="Demo" method="post" class="fs-1">
+        <Button id="DemoOpenAiBtn" class="btn btn-success">Make OpenAI responce to console Test!</Button>
     </Form>
 
     <div class="mt-4">
@@ -13,7 +13,7 @@
         <pre id="OpenAIResponce" class="fs-5">--OpenAI response field--</pre>
     </div>
 
-    <Form id="DemoForm" asp-controller="Demo" method="post" class="fs-1">
+    <Form id="DF" asp-controller="Demo" method="post" class="fs-1">
         <Button type="button" id="DemoBtn" class="btn btn-success">Make String responce to console Test!</Button>
     </Form>
 
@@ -29,13 +29,7 @@ PostStringOnBtnClick
         event.preventDefault(); // blokuje przeładowanie strony
 
         console.log("Button clicked, fetching OpenAI response...");
-
-        fetch('/Demo/PostOpenAiResponceOnBtnClick', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            }
-        })
+        fetch('@Url.Action("PostOpenAiResponceOnBtnClick", "Demo")', { method: 'POST'})
         .then(response => response.text())
         .then(data => {
             console.log("Response from server:", data);
