@@ -1,4 +1,5 @@
 ﻿using ExamMeAI.Data;
+using ExamMeAI.Demo.OpenAI;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -52,5 +53,20 @@ namespace ExamMeAI.Controllers
             var questions = _context.Question.ToList();
             return PartialView("ExamMe", questions);
         }
+
+        public IActionResult GetAssessment()
+        {
+            string v = "";
+            //if (_config.GetConnectionString("OpenAIKey") != null)
+            //{
+            //    var question = "q";
+            //    var answer = "a";
+
+            //    v = ChatOpenAI.GetInstance().RunAiTest(_config.GetConnectionString("OpenAIKey"), question, answer);
+            //}
+
+            return Content("Testowy message!");
+        }
+
     }
 }
