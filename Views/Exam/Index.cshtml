@@ -61,7 +61,7 @@
       <div class="hstack gap-3">
         <div class="vr"></div>
         <div class="p-2">
-            <button id="AssessmentButton"type="button" class="btn btn-primary"style="--bs-btn-padding-y: .25rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .75rem;">
+            <button id="AssessmentButton" type="button" class="btn btn-primary"style="--bs-btn-padding-y: .25rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .75rem;">
                 <b>Test by AI</b>
             </button>
         </div>
@@ -72,7 +72,7 @@
 
 <div class="container-index" id="divContainer">
     <label><strong>AI assessment and motivation</strong></label>
-    <textarea id="assessment' class="form-index"></textarea> 
+    <textarea id="assessment" class="form-index"></textarea> 
 </div>
 
 @section Scripts {
@@ -115,10 +115,14 @@
         });
         </script>
     <script>
-        document.GetElementById("AssessmentButton").AddeventListener("click", function() {
-            fetch('@Url.Action("GetAssessment", "Exam")')
-            .then(responce => {
-                document.GetElementById("assessment").value = responce;
+        document.getElementById("AssessmentButton").addEventListener("click", function(e) {
+            e.preventDefault();
+            console.log("coś pisze")
+            fetch('@Url.Action("GetAssessment", "Exam")', {method: 'POST'})
+            .then(resp => resp.text())
+            .then(data => {
+                console.log("Response from server:", data);
+                document.getElementById("assessment").value = data;
             })
         });
     </script>

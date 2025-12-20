@@ -53,10 +53,11 @@ namespace ExamMeAI.Controllers
             var questions = _context.Question.ToList();
             return PartialView("ExamMe", questions);
         }
-
+        // Nowa akcja POST dedykowana dla AJAX. Zwraca dane string.
+        [HttpPost]
         public IActionResult GetAssessment()
         {
-            string v = "";
+            //string v = "";
             //if (_config.GetConnectionString("OpenAIKey") != null)
             //{
             //    var question = "q";
@@ -65,6 +66,7 @@ namespace ExamMeAI.Controllers
             //    v = ChatOpenAI.GetInstance().RunAiTest(_config.GetConnectionString("OpenAIKey"), question, answer);
             //}
 
+            //return Content(v);
             return Content("Testowy message!");
         }
 
