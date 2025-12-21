@@ -6,3 +6,138 @@
     <h1 class="display-4">Welcome</h1>
     <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
 </div>
+
+<div class="vstack gap-3">
+    <h2>Example Open AI answer:</h2>
+    <pre  id="OpenAIResponce" class="fs-5" style="white-space: pre-wrap; overflow-wrap: anywhere;">       Assistant: Oh boy! Mi mi! Porozmawiamy o asynchroniczności w DI, czyli jak to zrobić, gdy konstruktor nie może być async i kiedy warto użyć asynchronicznych technik razem z kontenerem DI. Poniżej kilka praktycznych podejść, wraz z krótkimi przykładami (dla .NET / Microsoft.Extensions.DependencyInjection).
+
+1) Async factory (Func&lt;Task&lt;T&gt;&gt;)
+Najprostszy sposób: zarejestrować fabrykę, która zwraca Task&lt;T&gt; i w niej wykonać asynchiczne inicjalizacje.
+
+- Rejestracja:
+  - services.AddSingleton&lt;Func&lt;Task&lt;MyService&gt;&gt;&gt;(sp =&gt; async () =&gt;
+  - {
+  -     var dep = sp.GetRequiredService&lt;Dependency&gt;();
+  -     var s = new MyService(dep);
+  -     await s.InitializeAsync(); // asynchiczne wejście w stan gotowości
+  -     return s;
+  - });
+
+- Użycie:
+  - var factory = serviceProvider.GetRequiredService&lt;Func&lt;Task&lt;MyService&gt;&gt;&gt;();
+  - var svc = await factory(); // inicjalizacja wykonana podczas wywołania
+  - await svc.DoWorkAsync();
+
+Zalety: prosto, bez zmieniania sygnatur konstruktorów, działa z dowolnym DI.
+
+2) InitAsync na serwisie (InitializeAsync) + Lazy/Factory wrapper
+Jeśli chcesz mieć możliwość inicjalizacji po konstrukcji, możesz dodać metodę InitializeAsync i zapewnić, że wywoływana jest tylko raz (np. przy pierwszym użyciu).
+
+- Interfejs (opcjonalny):
+  - public interface IAsyncInitializable { Task InitializeAsync(); }
+
+- Implementacja MyService:
+  - public class MyService : IAsyncInitializable, IAsyncDisposable
+  - {
+  -     private bool _initialized;
+  -     public async Task InitializeAsync()
+  -     {
+  -         if (_initialized) return;
+  -         // asynchroniczna inicjalizacja
+  -         await LoadDataAsync();
+  -         _initialized = true;
+  -     }
+  -     public async ValueTask DisposeAsync() { /* cleanup */ }
+  - }
+
+- Rejestracja (zależnie od potrzeb, możesz użyć zwykłego rejestratora i inicjalizatora):
+  - services.AddSingleton&lt;MyService&gt;(); // lub AddScoped, zależnie od lifetimes
+  - // Wywołanie inicjalizacji przy pierwszym użyciu poprzez wrapper/wywołanie InitializeAsync()
+
+- Użycie (przykład wrappera):
+  - public class SomeConsumer
+  - {
+  -     private readonly MyService _svc;
+  -     public SomeConsumer(MyService svc) { _svc = svc; }
+  -     public async Task DoWorkAsync()
+  -     {
+  -         await _svc.InitializeAsync();
+  -         await _svc.DoWorkAsync();
+  -     }
+  - }
+
+Zalety: proste w utrzymaniu, inicjalizacja może być wywołana dokładnie wtedy, gdy potrzebujemy.
+
+3) AsyncLazy (opóźniona inicjalizacja przy pierwszym użyciu)
+Gdy chcesz, by inicjalizacja odbyła się dopiero przy pierwszym odwołaniu do serwisu, użyj wzorca AsyncLazy.
+
+- Implementacja prostego AsyncLazy&lt;T&gt; (własny kod):
+  - public class AsyncLazy&lt;T&gt;
+  - {
+  -     private readonly Func&lt;Task&lt;T&gt;&gt; _factory;
+  -     private Task&lt;T&gt; _task;
+  -     public AsyncLazy(Func&lt;Task&lt;T&gt;&gt; factory) { _factory = factory; }
+  -     public Task&lt;T&gt; Value =&gt; _task ??= _factory();
+  - }
+
+- Rejestracja:
+  - services.AddSingleton&lt;AsyncLazy&lt;MyService&gt;&gt;(sp =&gt; new AsyncLazy&lt;MyService&gt;(async () =&gt;
+  - {
+  -     var dep = sp.GetRequiredService&lt;Dependency&gt;();
+  -     var s = new MyService(dep);
+  -     await s.InitializeAsync();
+  -     return s;
+  - }));
+
+- Użycie:
+  - var lazy = serviceProvider.GetRequiredService&lt;AsyncLazy&lt;MyService&gt;&gt;();
+  - var svc = await lazy.Value;
+
+Zalety: inicjalizacja dopiero wtedy, gdy potrzebne — oszczędza zasoby.
+
+4) IHostedService (inicjalizacja na starcie aplikacji)
+Jeśli chcesz, żeby inicjalizacja została wykonana raz na starcie aplikacji (np. po uruchomieniu bazy danych, migracje), użyj IHostedService.
+
+- Implementacja:
+  - public class StartupInitializer : IHostedService
+  - {
+  -     private readonly IServiceProvider _provider;
+  -     public StartupInitializer(IServiceProvider provider) { _provider = provider; }
+  -     public async Task StartAsync(CancellationToken cancellationToken)
+  -     {
+  -         var svc = _provider.GetRequiredService&lt;MyService&gt;();
+  -         await svc.InitializeAsync();
+  -     }
+  -     public Task StopAsync(CancellationToken cancellationToken) =&gt; Task.CompletedTask;
+  - }
+
+- Rejestracja:
+  - services.AddSingleton&lt;MyService&gt;();
+  - services.AddHostedService&lt;StartupInitializer&gt;();
+
+Zalety: jasny punkt wejścia na start, nie trzeba poza DI samodzielnie wywoływać InitializeAsync.
+
+5) IAsyncDisposable do czyszczenia
+Jeśli masz zasoby, które trzeba asynchronicznie zwolnić, zaimplementuj IAsyncDisposable. Nowe wersje DI w .NET potrafią automatycznie wywołać DisposeAsync przy końcu scope’u.
+
+- Przykład:
+  - public class MyService : IAsyncDisposable
+  - {
+  -     public ValueTask DisposeAsync() { // asynchroniczny cleanup
+  -         return new ValueTask(CleanupAsync());
+  -     }
+  -     private Task CleanupAsync() =&gt; Task.CompletedTask;
+  - }
+
+Ważne wskazówki:
+- Konstruktorów asynchronicznych nie można mieć. Zawsze używaj jednej z powyższych metod inicjalizacji.
+- Wybierz pattern zgodnie z cyklem życia serwisów:
+  - AsyncFactory lub AsyncLazy: inicjalizacja przy pierwszym użyciu.
+  - IHostedService: inicjalizacja na starcie aplikacji.
+  - IAsyncDisposable: czyszczenie asynchroniczne.
+- Zadbaj o bezpieczeństwo wątkowe. Inicjalizacja powinna być idempotentna (nie powielać inicjalizacji, nawet jeśli ktoś równocześnie wywoła factory).
+- Rozważ CancellationToken w InitAsync, aby móc anulować operacje w razie zamknięcia aplikacji.
+- Nie wszystkie kontenery DI mają wbudowaną obsługę IAsyncDisposable, ale w Microsoft.Extensions.DependencyInjection obsługa ta jest dostępna w nowszych wersjach.
+
+       Jeśli podasz, w jakim środowisku pracujesz (ASP.NET Core, Blazor, WPF, inna biblioteka), oraz jakich lifetimes używasz (Singleton/Scoped/Transient), mogę dopasować konkretny przykład do twojej aplikacji i pokazać gotowy kod do skopiowania. Mi-miki!
+</pre>
