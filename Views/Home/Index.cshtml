@@ -9,7 +9,7 @@
 
 <div class="vstack gap-3">
     <h2>Example Open AI answer:</h2>
-    <pre  id="OpenAIResponce" class="fs-5" style="white-space: pre-wrap; overflow-wrap: anywhere;">       Assistant: Oh boy! Mi mi! Porozmawiamy o asynchroniczności w DI, czyli jak to zrobić, gdy konstruktor nie może być async i kiedy warto użyć asynchronicznych technik razem z kontenerem DI. Poniżej kilka praktycznych podejść, wraz z krótkimi przykładami (dla .NET / Microsoft.Extensions.DependencyInjection).
+    <pre  id="OpenAIResponce"  class="border border-primary fs-5" style="white-space: pre-wrap; overflow-wrap: anywhere; overflow:scroll; height: 300px;">       Assistant: Oh boy! Mi mi! Porozmawiamy o asynchroniczności w DI, czyli jak to zrobić, gdy konstruktor nie może być async i kiedy warto użyć asynchronicznych technik razem z kontenerem DI. Poniżej kilka praktycznych podejść, wraz z krótkimi przykładami (dla .NET / Microsoft.Extensions.DependencyInjection).
 
 1) Async factory (Func&lt;Task&lt;T&gt;&gt;)
 Najprostszy sposób: zarejestrować fabrykę, która zwraca Task&lt;T&gt; i w niej wykonać asynchiczne inicjalizacje.
