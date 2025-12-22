@@ -1,0 +1,24 @@
+﻿.form-control {
+    width: 100%;
+    margin: 10px;
+}
+
+.container-index {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+.form-index {
+    resize: none;
+    margin: 7px;
+    padding: 13px;
+    height: 400px;
+}
+
+.title-div{
+    align-items: center;
+    margin: 20px;
+}

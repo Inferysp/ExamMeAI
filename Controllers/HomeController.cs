@@ -1,20 +1,42 @@
-using System.Diagnostics;
+using ExamMeAI.Demo.controllerDI;
 using ExamMeAI.Models;
+using ExamMeAI.Providers.NLog;
 using Microsoft.AspNetCore.Mvc;
+using NLog;
+using System;
+using System.Diagnostics;
 
 namespace ExamMeAI.Controllers
 {
     public class HomeController : Controller
     {
+
+        private readonly IDateTime _dateTime;
+
         private readonly ILogger<HomeController> _logger;
 
-        public HomeController(ILogger<HomeController> logger)
+        public HomeController(ILogger<HomeController> logger, IDateTime dateTime)
         {
+            _dateTime = dateTime;
             _logger = logger;
         }
 
         public IActionResult Index()
         {
+            var serverTime = _dateTime.Now;
+            if (serverTime.Hour < 12)
+            {
+                ViewData["Message"] = "It's morning here - Good Morning!";
+            }
+            else if (serverTime.Hour < 17)
+            {
+                ViewData["Message"] = "It's afternoon here - Good Afternoon!";
+                (NLogSingleton.GetInstance()).NlogInit().Info("It's afternoon here - Good Afternoon!");
+            }
+            else
+            {
+                ViewData["Message"] = "It's evening here - Good Evening!";
+            }
             return View();
         }
 
@@ -28,5 +50,6 @@ namespace ExamMeAI.Controllers
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
+
     }
 }

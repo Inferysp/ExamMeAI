@@ -1,0 +1,27 @@
+﻿<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#questionsModal">
+    Pokaż pytania
+</button>
+
+<!-- Modal -->
+<div class="modal fade" id="questionsModal" tabindex="-1" aria-labelledby="questionsModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="questionsModalLabel">Lista pytań</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Zamknij"></button>
+      </div>
+      <div class="modal-body" id="questionsContent">
+        <!-- tutaj wczytamy partial -->
+      </div>
+    </div>
+  </div>
+</div>
+
+@section Scripts {
+    <script>
+        // Ładowanie danych do modala przez AJAX
+        $('#questionsModal').on('show.bs.modal', function () {
+            $("#questionsContent").load('/Exam/GetQuestions');
+        });
+    </script>
+}

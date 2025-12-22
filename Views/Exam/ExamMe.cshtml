@@ -1,0 +1,15 @@
+﻿@{
+    ViewData["Title"] = "Exam Me AI";
+}
+
+@model IEnumerable<Questions>
+
+<ul>
+@foreach (var q in Model)
+{
+    <li>@q.QuestionText</li>
+}
+</ul>
+
+<p>test</p>
+
