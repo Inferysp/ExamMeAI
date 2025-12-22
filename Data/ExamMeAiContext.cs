@@ -19,7 +19,9 @@ namespace ExamMeAI.Data
         public DbSet<Questions> Questions { get; set; }
         public DbSet<Title> Title { get; set; }
         public DbSet<Domain> Domain { get; set; }
-
         public DbSet<Users> Users { get; set; }
+        public DbSet<Exams> Exams { get; set; }
+
+        public DbSet<UserActivity> UserActivity { get; set; }
     }
 }

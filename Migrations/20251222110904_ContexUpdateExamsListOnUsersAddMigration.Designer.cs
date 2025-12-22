@@ -4,6 +4,7 @@ using ExamMeAI.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ExamMeAI.Migrations
 {
     [DbContext(typeof(ExamMeAiContext))]
-    partial class ExamMeAiContextModelSnapshot : ModelSnapshot
+    [Migration("20251222110904_ContexUpdateExamsListOnUsersAddMigration")]
+    partial class ContexUpdateExamsListOnUsersAddMigration
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -49,12 +52,6 @@ namespace ExamMeAI.Migrations
 
                     b.Property<string>("AiEvaluation")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("AiModel")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("AiService")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("ExamDate")
@@ -145,42 +142,6 @@ namespace ExamMeAI.Migrations
                     b.ToTable("Title");
                 });
 
-            modelBuilder.Entity("ExamMeAI.Models.UserActivity", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<DateTime?>("ActivityDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("ActivityUserInput")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("IsExaminedByAI")
-                        .HasColumnType("bit");
-
-                    b.Property<int>("QuestionId")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("UsersId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("examinationId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("userId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("UsersId");
-
-                    b.ToTable("UserActivity");
-                });
-
             modelBuilder.Entity("ExamMeAI.Models.Users", b =>
                 {
                     b.Property<int>("Id")
@@ -240,13 +201,6 @@ namespace ExamMeAI.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("ExamMeAI.Models.UserActivity", b =>
-                {
-                    b.HasOne("ExamMeAI.Models.Users", null)
-                        .WithMany("UserActivity")
-                        .HasForeignKey("UsersId");
-                });
-
             modelBuilder.Entity("ExamMeAI.Models.Domain", b =>
                 {
                     b.Navigation("Questions");
@@ -262,8 +216,6 @@ namespace ExamMeAI.Migrations
                     b.Navigation("Exams");
 
                     b.Navigation("Questions");
-
-                    b.Navigation("UserActivity");
                 });
 #pragma warning restore 612, 618
         }
