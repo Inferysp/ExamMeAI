@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace ExamMeAI.Models
 {
-    public class Question
+    public class Questions
     {
 
         public int ID { get; set; }
@@ -12,7 +12,8 @@ namespace ExamMeAI.Models
         [Required(ErrorMessage = "Treść pytania jest wymagana")]
         [Display(Name = "Treść pytania")]
         public string QuestionText { get; set; } = null!;
-        public string? User { get; set; }
+        public int UserId { get; set; }
+        public Users User { get; set; } = null!;   
 
         [Required(ErrorMessage = "Tytuł jest wymagany")]
         [Display(Name = "Tytuł")]
@@ -27,5 +28,8 @@ namespace ExamMeAI.Models
 
         [ValidateNever]
         public Domain Domain { get; set; } = null!;
+
+        [DataType(DataType.Date)]
+        public DateTime? LastChange { get; set; }
     }
 }

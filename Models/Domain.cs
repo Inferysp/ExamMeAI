@@ -7,7 +7,7 @@ namespace ExamMeAI.Models
     {
         public int ID { get; set; }
         public string Name { get; set; } = null!;
-        public ICollection<Question> Questions { get; set; } = new List<Question>();
+        public ICollection<Questions> Questions { get; set; } = new List<Questions>();
 
     }
 }

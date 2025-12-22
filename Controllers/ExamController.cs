@@ -23,14 +23,14 @@ namespace ExamMeAI.Controllers
         [HttpGet]
         public IActionResult Index()
         {
-            var questions = _context.Question.ToList();
+            var questions = _context.Questions.ToList();
             return View(questions);
         }
 
         [HttpPost]
         public IActionResult GetQuestionDetails(int selectedID)
         {
-            var selectedQuestion = _context.Question.FirstOrDefault(q => q.ID == selectedID);
+            var selectedQuestion = _context.Questions.FirstOrDefault(q => q.ID == selectedID);
 
             if (selectedQuestion != null)
             {
@@ -48,7 +48,7 @@ namespace ExamMeAI.Controllers
 
         public async Task<IActionResult> GetQuestions()
         {
-            var questions = _context.Question.ToList();
+            var questions = _context.Questions.ToList();
             return PartialView("ExamMe", questions);
         }
 

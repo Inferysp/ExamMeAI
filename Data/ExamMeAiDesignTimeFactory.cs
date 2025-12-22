@@ -16,6 +16,7 @@ namespace ExamMeAI.Data
                 .SetBasePath(Directory.GetCurrentDirectory())
                 .AddJsonFile("appsettings.json", optional: false, reloadOnChange: false)
                 .AddJsonFile($"appsettings.{env}.json", optional: true)
+                .AddUserSecrets<Program>(optional: true)
                 .AddEnvironmentVariables()
                 .Build();
 

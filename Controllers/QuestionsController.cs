@@ -23,8 +23,8 @@ namespace ExamMeAI.Controllers
         // GET: Questions
         public async Task<IActionResult> Index()
         {
-            var qList = await _context.Question
-                .Select(c => new QuestionList
+            var qList = await _context.Questions
+                .Select(c => new QuestionsList
                 {
                     ID = c.ID,
                     QuestionText = c.QuestionText,
@@ -44,7 +44,7 @@ namespace ExamMeAI.Controllers
                 return NotFound();
             }
 
-            var question = await _context.Question
+            var question = await _context.Questions
                 .Include(q => q.Title)
                 .Include(a => a.Domain)
                 .FirstOrDefaultAsync(m => m.ID == id);
@@ -70,18 +70,18 @@ namespace ExamMeAI.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ID,QuestionText,User,TitleID,DomainID")] Question question)
+        public async Task<IActionResult> Create([Bind("ID,QuestionText,User,TitleID,DomainID")] Questions questions)
         {
 
             // SPRAWDŹ CZY TitleID ISTNIEJE W BAZIE
-            bool titleExists = await _context.Title.AnyAsync(t => t.ID == question.TitleID);
+            bool titleExists = await _context.Title.AnyAsync(t => t.ID == questions.TitleID);
             if (!titleExists)
             {
                 ModelState.AddModelError("TitleID", "Wybrany tytuł nie istnieje.");
             }
 
             // SPRAWDŹ CZY DomainID ISTNIEJE
-            bool domainExists = await _context.Domain.AnyAsync(d => d.ID == question.DomainID);
+            bool domainExists = await _context.Domain.AnyAsync(d => d.ID == questions.DomainID);
             if (!domainExists)
             {
                 ModelState.AddModelError("DomainID", "Wybrana domena nie istnieje.");
@@ -91,7 +91,7 @@ namespace ExamMeAI.Controllers
             {
                 if (ModelState.IsValid)
                 {
-                    _context.Add(question);
+                    _context.Add(questions);
                     await _context.SaveChangesAsync();
                     TempData["SuccessMessage"] = "Pytanie zostało dodane.";
                     return RedirectToAction(nameof(Index));
@@ -117,9 +117,9 @@ namespace ExamMeAI.Controllers
             //    .ToList();
             //TempData["ModelErrors"] = System.Text.Json.JsonSerializer.Serialize(errors);
 
-            ViewData["TitleID"] = new SelectList(_context.Title, "ID", "TitleText", question.TitleID);
-            ViewData["DomainID"] = new SelectList(_context.Domain, "ID", "Name", question.DomainID);
-            return View(question);
+            ViewData["TitleID"] = new SelectList(_context.Title, "ID", "TitleText", questions.TitleID);
+            ViewData["DomainID"] = new SelectList(_context.Domain, "ID", "Name", questions.DomainID);
+            return View(questions);
         }
 
         // GET: Questions/Edit/5
@@ -130,7 +130,7 @@ namespace ExamMeAI.Controllers
                 return NotFound();
             }
 
-            var question = await _context.Question.FindAsync(id);
+            var question = await _context.Questions.FindAsync(id);
             if (question == null)
             {
                 return NotFound();
@@ -143,7 +143,7 @@ namespace ExamMeAI.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,text,User,Title")] Question question)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,text,User,Title")] Questions question)
         {
             if (id != question.ID)
             {
@@ -181,7 +181,7 @@ namespace ExamMeAI.Controllers
                 return NotFound();
             }
 
-            var question = await _context.Question
+            var question = await _context.Questions
                 .FirstOrDefaultAsync(m => m.ID == id);
             if (question == null)
             {
@@ -196,10 +196,10 @@ namespace ExamMeAI.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var question = await _context.Question.FindAsync(id);
+            var question = await _context.Questions.FindAsync(id);
             if (question != null)
             {
-                _context.Question.Remove(question);
+                _context.Questions.Remove(question);
             }
 
             await _context.SaveChangesAsync();
@@ -208,7 +208,7 @@ namespace ExamMeAI.Controllers
 
         private bool QuestionExists(int id)
         {
-            return _context.Question.Any(e => e.ID == id);
+            return _context.Questions.Any(e => e.ID == id);
         }
     }
 }

@@ -1,7 +1,7 @@
 ﻿
 namespace ExamMeAI.Models.CombiningModels
 {
-    public class QuestionList
+    public class QuestionsList
     {
         public int ID { get; set; }
         public string QuestionText { get; set; } = null!;
