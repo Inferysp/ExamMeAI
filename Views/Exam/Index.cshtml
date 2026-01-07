@@ -81,6 +81,9 @@
             const dropdown = document.getElementById('questionDropdown');
             const container = document.getElementById('labelContainer');
             const label = document.getElementById('selectedQuestionTextLabel');
+            const button = document.getElementById('Assessment');
+
+            let btndisabled = true;
 
             dropdown.addEventListener('change', async function() {
                 const selectedid = this.value;
@@ -97,16 +100,28 @@
                     const response = await fetch('@Url.Action("GetQuestionDetails", "Exam")',
                     {
                         method: 'POST',
+                        style
                         body: formData
                     })
+                    
+                    const response2 = await fetch ('@Url.Action("ExaminAIButtonToggle", "Exam")', {
+                        method: 'POST',
+                        body: Json.stringify({ questionID: selectedid });
+                    });
 
                     if(response.ok) {
                         const data = await response.json();
                         label.textContent = data.questionText;
                         container.style.display = 'block';
 
-                    } else {
+                    } else if(response2.ok) {
+                        const data = await response2.json();
+                        button.disabled = data.isExaminedByAI;
+
+                    } else if(response.ok != true ){
                         console.error('Błąd sieci:', response.statusText);
+                    } else {
+                        console.error('Błąd sieci:', response2.statusText);
                     }
                  } catch (error) {
                      console.error('Błąd pobierania danych:', error);
