@@ -57,5 +57,14 @@ namespace ExamMeAI.Controllers
         {
             return Content("answer: " + answer + " question: " + question);
         }
+
+        [HttpPost]
+        public IActionResult ExaminAIButtonToggle(int questionID)
+        {
+            var coto = _context.UserActivity.Where(e => e.QuestionId == questionID).FirstOrDefault();
+            if ( coto.IsExaminedByAI == true )
+                return Json( new { isExaminedByAI = false });
+            return Json(new { isExaminedByAI = true });
+        }
     }
 }
