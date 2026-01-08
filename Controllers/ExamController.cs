@@ -46,6 +46,20 @@ namespace ExamMeAI.Controllers
             return NotFound();
         }
 
+        [HttpPost]
+        public IActionResult ExaminAIButtonToggle([FromBody] int questionID)
+        {
+            //var coto = _context.UserActivity.Where(e => e.QuestionId == questionID).FirstOrDefault();
+            //if (coto.IsExaminedByAI == true)
+            //    return Json(new { isExaminedByAI = false });
+
+            //Test only
+            if (questionID != null)
+                return Json(new { isExaminedByAI = false });
+
+            return Json(new { isExaminedByAI = true });
+        }
+
         public async Task<IActionResult> GetQuestions()
         {
             var questions = _context.Questions.ToList();
@@ -58,13 +72,5 @@ namespace ExamMeAI.Controllers
             return Content("answer: " + answer + " question: " + question);
         }
 
-        [HttpPost]
-        public IActionResult ExaminAIButtonToggle(int questionID)
-        {
-            var coto = _context.UserActivity.Where(e => e.QuestionId == questionID).FirstOrDefault();
-            if ( coto.IsExaminedByAI == true )
-                return Json( new { isExaminedByAI = false });
-            return Json(new { isExaminedByAI = true });
-        }
     }
 }
