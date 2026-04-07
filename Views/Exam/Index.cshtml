@@ -25,7 +25,7 @@
     <span id="selectedQuestionTextLabel"></span> 
 </div>
 
-<div class="container-index" id="divContainer">
+<div class="container-index" id="divAnswerContainer">
     <label><strong>Your answer:</strong></label>
     <textarea id="givenAnswer" class="form-index"></textarea> 
 </div>
@@ -61,7 +61,7 @@
       <div class="hstack gap-3">
         <div class="vr"></div>
         <div class="p-2">
-            <button id="AssessmentButton" type="button" class="btn btn-primary"style="--bs-btn-padding-y: .25rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .75rem;">
+            <button disabled="true" id="AssessmentButton" type="button" class="btn btn-primary"style="--bs-btn-padding-y: .25rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .75rem;">
                 <b>Test by AI</b>
             </button>
         </div>
@@ -81,6 +81,9 @@
             const dropdown = document.getElementById('questionDropdown');
             const container = document.getElementById('labelContainer');
             const label = document.getElementById('selectedQuestionTextLabel');
+            const button = document.getElementById('AssessmentButton');
+
+            //let btndisabled = true;
 
             dropdown.addEventListener('change', async function() {
                 const selectedid = this.value;
@@ -94,24 +97,41 @@
                     const formData = new FormData();
                     formData.append('selectedID', selectedid);
 
-                    const response = await fetch('@Url.Action("GetQuestionDetails", "Exam")',
+                    const request1 = fetch('@Url.Action("GetQuestionDetails", "Exam")',
                     {
                         method: 'POST',
                         body: formData
                     })
 
-                    if(response.ok) {
+                    const request2 = fetch('@Url.Action("ExaminAIButtonToggle", "Exam")', {
+                        method: 'POST',
+                        headers: { "Content-Type": "application/json" },
+                        body: JSON.stringify(Number(selectedid))
+
+                    });
+                        console.log('selectedid = ' + selectedid);
+
+                    const [response, response2] = await Promise.all([request1, request2]);
+
+                    if (response.ok) {
                         const data = await response.json();
                         label.textContent = data.questionText;
                         container.style.display = 'block';
-
                     } else {
-                        console.error('Błąd sieci:', response.statusText);
+                        console.error('Błąd pobierania detali pytania:', response.statusText);
                     }
+
+                    if (response2.ok) {
+                        const data2 = await response2.json();
+                        if (button) button.disabled = data2.isExaminedByAI;
+                    } else {
+                        console.error('Błąd pobierania statusu AI:', response2.statusText);
+                    }
+
                  } catch (error) {
                      console.error('Błąd pobierania danych:', error);
                 }
-            })
+            });
         });
     </script>
     <script>
