@@ -7,9 +7,11 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using ExamMeAI.Data;
 using ExamMeAI.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace ExamMeAI.Controllers
 {
+    [Authorize]
     public class DomainsController : Controller
     {
         private readonly ExamMeAiContext _context;
