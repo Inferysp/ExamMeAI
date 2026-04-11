@@ -1,8 +1,16 @@
 ﻿@if (Model != null)
 {
     <div class="user-menu font-weight-bold">
-        <p>@Model._name</p>
-        @* <a href="Account/Logout">Logout</a> *@
+        <ul class="navbar-nav flex-grow-1">
+            <li class="">
+                <p>@Model._name</p>
+            </li>
+            <li class="nav-item">
+                <form asp-controller="Account" asp-action="Logout" method="post" id="logoutForm">
+                    <button type="submit" class="nav-link">Logout</button>
+                </form>
+            </li>
+        </ul>
     </div>
 }
 else

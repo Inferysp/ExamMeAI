@@ -35,6 +35,7 @@ namespace ExamMeAI
                     options.SlidingExpiration = true;
                     options.AccessDeniedPath = "/Home/Index";
                     options.LoginPath = "/Account/Login";
+                    options.LogoutPath = "/Account/Logout";
                 });
 
             //services.AddIdentity<IdentityUser, IdentityRole>(options =>

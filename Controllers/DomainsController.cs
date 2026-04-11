@@ -11,7 +11,7 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace ExamMeAI.Controllers
 {
-    [Authorize]
+    [Authorize(Roles = "Administrator")]
     public class DomainsController : Controller
     {
         private readonly ExamMeAiContext _context;
