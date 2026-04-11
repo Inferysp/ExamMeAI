@@ -1,0 +1,11 @@
+﻿@if (Model != null)
+{
+    <div class="user-menu font-weight-bold">
+        <p>@Model._name</p>
+        @* <a href="Account/Logout">Logout</a> *@
+    </div>
+}
+else
+{
+    <a href="Account/Login">Login</a>
+}

@@ -1,7 +1,9 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore;
+using System;
 
 namespace ExamMeAI.Models
 {
+    [Keyless]
     public class LoginViewModel
     {
         public string Email { get; set; }

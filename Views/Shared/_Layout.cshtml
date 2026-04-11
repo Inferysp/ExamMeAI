@@ -41,9 +41,12 @@
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Account" asp-action="Login">Login</a>
                         </li>
-
                     </ul>
                 </div>
+                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-end">
+                    <ul class="navbar-nav flex-grow-1">
+                        @await Component.InvokeAsync("UserMenu")
+                    </ul>
             </div>
         </nav>
     </header>

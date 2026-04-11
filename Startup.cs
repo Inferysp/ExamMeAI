@@ -1,8 +1,9 @@
 ﻿using ExamMeAI.Data;
 using ExamMeAI.Demo.controllerDI;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Options;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 
 namespace ExamMeAI
 {
@@ -13,7 +14,7 @@ namespace ExamMeAI
             Configuration = configuration;
         }
 
-        public IConfiguration Configuration { get; }
+        public IConfiguration Configuration { get; set; }
 
         public void ConfigureServices(IServiceCollection services)
         {
@@ -32,9 +33,16 @@ namespace ExamMeAI
                 {
                     options.ExpireTimeSpan = TimeSpan.FromMinutes(20);
                     options.SlidingExpiration = true;
-                    options.AccessDeniedPath = "/Account/Login";
+                    options.AccessDeniedPath = "/Home/Index";
                     options.LoginPath = "/Account/Login";
                 });
+
+            //services.AddIdentity<IdentityUser, IdentityRole>(options =>
+            //{
+            //    options.SignIn.RequireConfirmedAccount = false;
+            //})
+            //.AddEntityFrameworkStores<ExamMeAiContext>()
+            //.AddDefaultTokenProviders();
         }
         // C#
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)

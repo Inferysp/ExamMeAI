@@ -34,34 +34,30 @@ namespace ExamMeAI.Controllers
                 new Claim(ClaimTypes.Role, user._role),
             };
 
+            var identity = new ClaimsIdentity(
+                claims,
+                CookieAuthenticationDefaults.AuthenticationScheme
+            );
+
+            var principal = new ClaimsPrincipal(identity);
+
+            var authProps = new AuthenticationProperties
+            {
+                IsPersistent = true, // "Remember me"
+                ExpiresUtc = DateTimeOffset.UtcNow.AddMinutes(20)
+            };
+
+            await HttpContext.SignInAsync(
+                CookieAuthenticationDefaults.AuthenticationScheme,
+                principal,
+                authProps
+            );
+
             //Tylko administrator
-            if(returnUrl is not null)
+            if (returnUrl is not null)
             {
                 if (returnUrl.Contains("Domain") && user._role != "Administrator")
                     return RedirectToAction("Index", "Home");
-            }
-
-            //Login do cookie
-            if (model.RememberMe)
-            {
-                var identity = new ClaimsIdentity(
-                    claims,
-                    CookieAuthenticationDefaults.AuthenticationScheme
-                );
-
-                var principal = new ClaimsPrincipal(identity);
-
-                var authProps = new AuthenticationProperties
-                {
-                    IsPersistent = true, // "Remember me"
-                    ExpiresUtc = DateTimeOffset.UtcNow.AddMinutes(20)
-                };
-
-                await HttpContext.SignInAsync(
-                    CookieAuthenticationDefaults.AuthenticationScheme,
-                    principal,
-                    authProps
-                );
             }
 
             if (!string.IsNullOrEmpty(returnUrl))

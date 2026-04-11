@@ -1,6 +1,7 @@
 ﻿using ExamMeAI.Models;
 using Humanizer;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.VisualStudio.Web.CodeGeneration.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Reflection.Emit;
 
@@ -23,5 +24,6 @@ namespace ExamMeAI.Data
         public DbSet<Exams> Exams { get; set; }
 
         public DbSet<UserActivity> UserActivity { get; set; }
+        public DbSet<LoginViewModel> Accounts { get; set; }
     }
 }
