@@ -1,6 +1,9 @@
 ﻿using ExamMeAI.Data;
 using ExamMeAI.Demo.controllerDI;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 
 namespace ExamMeAI
 {
@@ -11,7 +14,7 @@ namespace ExamMeAI
             Configuration = configuration;
         }
 
-        public IConfiguration Configuration { get; }
+        public IConfiguration Configuration { get; set; }
 
         public void ConfigureServices(IServiceCollection services)
         {
@@ -24,8 +27,24 @@ namespace ExamMeAI
             services.AddDatabaseDeveloperPageExceptionFilter();
 
             services.AddControllersWithViews();
-        }
 
+            services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+                .AddCookie(options =>
+                {
+                    options.ExpireTimeSpan = TimeSpan.FromMinutes(20);
+                    options.SlidingExpiration = true;
+                    options.AccessDeniedPath = "/Home/Index";
+                    options.LoginPath = "/Account/Login";
+                    options.LogoutPath = "/Account/Logout";
+                });
+
+            //services.AddIdentity<IdentityUser, IdentityRole>(options =>
+            //{
+            //    options.SignIn.RequireConfirmedAccount = false;
+            //})
+            //.AddEntityFrameworkStores<ExamMeAiContext>()
+            //.AddDefaultTokenProviders();
+        }
         // C#
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
@@ -42,6 +61,13 @@ namespace ExamMeAI
             app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseRouting();
+            var cookiePolicyOptions = new CookiePolicyOptions
+            {
+                MinimumSameSitePolicy = SameSiteMode.Strict,
+            };
+
+            app.UseCookiePolicy(cookiePolicyOptions);
+            app.UseAuthentication();
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>

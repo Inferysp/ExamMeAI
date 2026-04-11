@@ -8,9 +8,11 @@ using Microsoft.EntityFrameworkCore;
 using ExamMeAI.Data;
 using ExamMeAI.Models;
 using ExamMeAI.Models.CombiningModels;
+using Microsoft.AspNetCore.Authorization;
 
 namespace ExamMeAI.Controllers
 {
+    [Authorize]
     public class QuestionsController : Controller
     {
         private readonly ExamMeAiContext _context;

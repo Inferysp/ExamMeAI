@@ -1,11 +1,13 @@
 ﻿using ExamMeAI.Data;
 using ExamMeAI.Demo.OpenAI;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System;
 
 namespace ExamMeAI.Controllers
 {
+    [Authorize]
     public class ExamController : Controller
     {
         private readonly ExamMeAiContext _context;
